@@ -1,0 +1,9 @@
+{
+  "name": "undercover",
+  "description": "Test coverage feedback loop using undercover gem",
+  "version": "1.0.0",
+  "author": {
+    "name": "Jan Grodowski"
+  },
+  "repository": "https://github.com/grodowski/undercover-claude"
+}
