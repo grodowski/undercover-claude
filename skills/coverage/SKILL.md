@@ -52,6 +52,8 @@ Run `bundle install` after adding the gems. Run the test suite once to generate 
 
 After every test run, run undercover to check for coverage gaps.
 
+Only use `--include-files` when you ran a partial test suite. Full suite → no flag.
+
 **Full test suite:**
 ```
 bundle exec undercover --format json
