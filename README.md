@@ -11,14 +11,15 @@ Unlike total coverage percentages, undercover checks **only the lines you change
 ## Installation
 
 **From marketplace:**
-```bash
-claude plugins add grodowski/undercover
+```
+/plugin marketplace add grodowski/undercover-claude
+/plugin install undercover@undercover-ci
 ```
 
 **From local clone (development):**
-```bash
-git clone https://github.com/grodowski/undercover-claude
-claude --plugin-dir /path/to/undercover-claude
+```
+/plugin marketplace add /path/to/undercover-claude
+/plugin install undercover@undercover-ci
 ```
 
 ## Prerequisites
@@ -79,12 +80,20 @@ By default undercover checks uncommitted changes only. For feature branches and 
 -c origin/main
 ```
 
+### Addressing UndercoverCI feedback on a PR
+
+When coverage is reported on a GitHub PR by [UndercoverCI](https://undercover-ci.com),
+the warnings live in the `coverage` check's annotations — which `gh pr view` and the
+GitHub MCP server don't expose. The skill instructs Claude to pull them directly with
+`gh api`, then fix the gaps and verify locally with `--compare`.
+
 ## Files
 
 ```
-undercover-claude-plugin/
+undercover-claude/
 ├── .claude-plugin/
-│   └── plugin.json           # Plugin manifest
+│   ├── plugin.json           # Plugin manifest
+│   └── marketplace.json      # Marketplace catalog (self-hosting)
 ├── skills/
 │   └── coverage/
 │       └── SKILL.md          # Skill instructions and setup guides
