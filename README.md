@@ -65,12 +65,14 @@ The plugin installs a skill that instructs Claude to run `undercover` after ever
 
 ## Usage
 
-Invoke `/undercover:coverage` inside Claude Code to:
+Invoke `/undercover:coverage` inside Claude Code. Type what you want to do after
+the command and the skill routes to the right guide (it defaults to the feedback
+loop if you say nothing):
 
-- Get SimpleCov setup instructions
-- Configure CI pipelines (GitHub Actions, CircleCI)
-- Set up coverage merging for parallel tests
-- Learn about configuration options
+- `/undercover:coverage set up coverage` — SimpleCov setup instructions
+- `/undercover:coverage set up CI` — CI with UndercoverCI or GitHub Actions
+- `/undercover:coverage parallel tests` — coverage merging for parallel runners
+- `/undercover:coverage check this PR` — read and address UndercoverCI feedback on a PR
 
 ### Feature branches and CI
 
@@ -96,7 +98,12 @@ undercover-claude/
 │   └── marketplace.json      # Marketplace catalog (self-hosting)
 ├── skills/
 │   └── coverage/
-│       └── SKILL.md          # Skill instructions and setup guides
+│       ├── SKILL.md          # Feedback loop + router (loads on every invocation)
+│       └── references/       # Guides loaded on demand
+│           ├── setup.md      # SimpleCov + Gemfile + .undercover + permissions
+│           ├── ci.md         # GitHub Actions / CircleCI / UndercoverCI / merging
+│           ├── pr-feedback.md # Reading UndercoverCI PR annotations via gh api
+│           └── skipping.md   # :nocov:, add_filter, --exclude-files
 └── README.md
 ```
 
