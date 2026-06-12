@@ -24,35 +24,17 @@ Unlike total coverage percentages, undercover checks **only the lines you change
 
 ## Prerequisites
 
-Your Ruby project needs SimpleCov configured to generate `coverage/coverage.json`. Use the `/undercover:coverage` skill inside Claude Code for setup instructions.
+Your Ruby project needs SimpleCov configured to generate `coverage/coverage.json`. You don't have to wire this up by hand — let the skill do it.
 
 ### Quick Setup
 
-1. Add to your Gemfile:
+Inside Claude Code, run the setup prompt:
 
-```ruby
-group :test do
-  gem 'simplecov'
-  gem 'undercover'
-end
+```
+/coverage set up coverage for this project
 ```
 
-2. Add to the top of `spec_helper.rb` or `test_helper.rb`:
-
-```ruby
-require 'simplecov'
-require 'undercover/simplecov_formatter'
-
-SimpleCov.formatter = SimpleCov::Formatter::Undercover
-
-SimpleCov.start do
-  add_filter(/^\/spec\//)  # For RSpec
-  add_filter(/^\/test\//)  # For Minitest
-  enable_coverage(:branch)
-end
-```
-
-3. Run `bundle install` and run your tests once to generate coverage data.
+Claude adds `simplecov` and `undercover` to your Gemfile, wires `SimpleCov::Formatter::Undercover` into `spec_helper.rb`/`test_helper.rb`, creates `.undercover` with a compare ref, runs `bundle install`, and runs your tests once to generate coverage data — then you're ready for the feedback loop.
 
 ## How It Works
 
@@ -65,14 +47,14 @@ The plugin installs a skill that instructs Claude to run `undercover` after ever
 
 ## Usage
 
-Invoke `/undercover:coverage` inside Claude Code. Type what you want to do after
+Invoke `/coverage` inside Claude Code. Type what you want to do after
 the command and the skill routes to the right guide (it defaults to the feedback
 loop if you say nothing):
 
-- `/undercover:coverage set up coverage` — SimpleCov setup instructions
-- `/undercover:coverage set up CI` — CI with UndercoverCI or GitHub Actions
-- `/undercover:coverage parallel tests` — coverage merging for parallel runners
-- `/undercover:coverage check this PR` — read and address UndercoverCI feedback on a PR
+- `/coverage set up coverage` — SimpleCov setup instructions
+- `/coverage set up CI` — CI with UndercoverCI or GitHub Actions
+- `/coverage parallel tests` — coverage merging for parallel runners
+- `/coverage check this PR` — read and address UndercoverCI feedback on a PR
 
 ### Feature branches and CI
 
