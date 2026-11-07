@@ -85,7 +85,7 @@ undercover-claude/
 │           ├── setup.md      # SimpleCov + Gemfile + .undercover + permissions
 │           ├── ci.md         # GitHub Actions / CircleCI / UndercoverCI / merging
 │           ├── pr-feedback.md # Reading UndercoverCI PR annotations via gh api
-│           └── skipping.md   # :nocov:, add_filter, --exclude-files
+│           └── skipping.md   # simplecov:disable, skip, --exclude-files
 └── README.md
 ```
 
