@@ -17,7 +17,7 @@ Use it to decide what to do, then read the matching reference file before acting
 - **Set up coverage in a Ruby project** (SimpleCov, Gemfile, `.undercover`, permissions) → read `references/setup.md`
 - **Set up CI** (UndercoverCI or GitHub Actions; also CircleCI and parallel test merging) → read `references/ci.md`
 - **Read/address UndercoverCI feedback on a PR** → read `references/pr-feedback.md`
-- **Skip coverage** for a file (`:nocov:`, `add_filter`, `--exclude-files`) → read `references/skipping.md`
+- **Skip coverage** for a file (`# simplecov:disable`, `skip`, `--exclude-files`) → read `references/skipping.md`
 - **Run the feedback loop** after tests, or anything else → use the loop below (the default)
 
 Stated intent: $ARGUMENTS
@@ -40,14 +40,16 @@ bundle exec undercover --format json
 bundle exec undercover --format json --include-files "app/models/foo.rb"
 bundle exec undercover --format json --include-files "app/models/*.rb,app/services/foo*.rb"
 ```
-`--include-files` accepts comma-separated glob patterns. When running a subset of
-tests, SimpleCov only has coverage data for loaded files. Without `--include-files`,
-undercover will falsely flag all other changed files as uncovered.
+`--include-files` accepts comma-separated glob patterns, matched relative to the
+directory SimpleCov ran in (in a monorepo, `lib/foo.rb`, not `apps/dash/lib/foo.rb`).
+When running a subset of tests, SimpleCov only has coverage data for loaded files.
+Without `--include-files`, undercover will falsely flag all other changed files as
+uncovered.
 
 Workflow:
 1. Run tests
 2. Run `bundle exec undercover --format json` (scoped with `--include-files` if partial)
-3. If gaps found: **write tests** for uncovered code. Prefer real tests over `:nocov:` — only use `:nocov:` when the code genuinely cannot or should not be tested (see `references/skipping.md`). Only delete code if you are certain it is dead/unreachable — understand why it's uncovered before removing it
+3. If gaps found: **write tests** for uncovered code. Prefer real tests over `# simplecov:disable`. Only use it when the code genuinely cannot or should not be tested (see `references/skipping.md`). Only delete code if you are certain it is dead/unreachable; understand why it's uncovered before removing it
 4. Repeat until undercover exits 0
 
 ### JSON output format
@@ -133,4 +135,4 @@ Deeper guides, loaded on demand (see Routing above):
 - `references/setup.md` — SimpleCov + Gemfile + `.undercover` + Claude permissions + CLI reference
 - `references/ci.md` — GitHub Actions, UndercoverCI, CircleCI, parallel test coverage merging
 - `references/pr-feedback.md` — reading UndercoverCI check annotations on a PR via `gh api`
-- `references/skipping.md` — `:nocov:`, `add_filter`, `--exclude-files` and when to use each
+- `references/skipping.md` — `# simplecov:disable`, `skip`, `--exclude-files` and when to use each

@@ -19,9 +19,11 @@ group :test do
 end
 ```
 
+undercover 0.9 requires SimpleCov 1.0+ and Ruby 3.2+. This skill assumes those versions.
+
 ## spec_helper.rb / test_helper.rb (at the very top, before any other requires)
 
-**Critical:** undercover requires `SimpleCov::Formatter::Undercover` — not `SimpleCov::Formatter::JSONFormatter` or any other formatter. Using the wrong formatter means undercover gets no coverage data and silently passes everything.
+**Critical:** undercover requires `SimpleCov::Formatter::Undercover`, not `SimpleCov::Formatter::JSONFormatter` or SimpleCov's default formatter. Their `coverage.json` lacks the data undercover uses to honour SimpleCov's `skip` filters, so filtered files get flagged as uncovered.
 
 ```ruby
 require 'simplecov'
@@ -30,10 +32,13 @@ require 'undercover/simplecov_formatter'
 SimpleCov.formatter = SimpleCov::Formatter::Undercover
 
 SimpleCov.start do
-  add_filter(/^\/spec\//)  # For RSpec
-  add_filter(/^\/test\//)  # For Minitest
   enable_coverage(:branch)
 end
+```
+
+SimpleCov's HTML formatter also writes `coverage/coverage.json`. To keep the HTML report, list the undercover formatter last so its file wins:
+```ruby
+SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::Undercover]
 ```
 
 Run `bundle install` after adding the gems. Run the test suite once to generate `coverage/coverage.json` before the first undercover check.
@@ -81,13 +86,11 @@ CLI options override file settings.
 undercover [options]
   -s, --simplecov PATH    SimpleCov JSON report file
   -l, --lcov PATH         LCOV report file (deprecated)
-  -p, --path PATH         Project directory
   -g, --git-dir PATH      Override .git directory location
   -c, --compare REF       Compare against git ref (branch/commit/tag)
-  -r, --ruby-syntax VER   Target Ruby syntax version
   -w, --max-warnings N    Stop after N warnings
   -f, --include-files GLOBS  Glob patterns to include (default: *.rb,*.rake,*.ru,Rakefile)
-  -x, --exclude-files GLOBS  Glob patterns to exclude (default: test/*,spec/*,db/*,config/*,*_test.rb,*_spec.rb)
+  -x, --exclude-files GLOBS  Glob patterns to exclude (default: test/*,spec/*,db/*,config/*,*_test.rb,*_spec.rb,vendor/*)
       --format FORMAT     Output format: text, json (default: text)
   -h, --help              Show help
 ```
